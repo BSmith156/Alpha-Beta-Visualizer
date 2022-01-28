@@ -1,0 +1,18 @@
+.controls-container {
+    background-color: #EBEBEC;
+    border-radius: 5px;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    position: absolute;
+    width: 20em;
+}
+
+.title {
+    text-align: center;
+    text-decoration: underline;
+}
+
+.text {
+    text-align: center;
+}

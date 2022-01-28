@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Alpha-Beta Visualizer</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bundle.css">
+        <link rel='icon' href='images/favicon.ico'>
+    </head>
+    <body>
+        <nav id="navbar" class="navbar navbar-dark bg-dark p-1">
+            <div class="container-fluid">
+                <a class="navbar-brand ms-2 nav-title" href="#">Alpha-Beta Visualizer</a>
+                <div class="navbar-nav">
+                    <a class="nav-link me-2" href="https://github.com/BSmith156" target="_blank"><img class="nav-img" src="images/github.svg" alt="GitHub logo"></a>
+                </div>
+            </div>
+        </nav>
+
+        <div id="controls" class="form-group controls-container m-3 p-4">
+            <span id = "main">
+                <h2 class = "title mb-3">Node Options</h2>
+                <p id = "unselectedText" class = "text">No node selected.</p>
+                <span id = "nodeOptions" style = "display: none">
+                    <button id = "addChild" class="btn btn-primary mb-1" style="width: 100%">Add Child</button>
+                    <button id = "deleteNode" class="btn btn-danger mb-1" style="width: 100%">Delete Node</button>
+                </span>
+            </span>
+        </div>
+
+        <canvas id="canvas" class="canvas m-3 ml-0"></canvas>
+    </body>
+    <script type="module" src="js/main.js"></script>
+</html>
