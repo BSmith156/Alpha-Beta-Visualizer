@@ -50,6 +50,7 @@ NodeManager.prototype.setValue = function() {
         value = 0;
     } else {
         value = Number.parseInt(value);
+        value = Math.min(99, Math.max(-99, value));
     }
     this.selected.value = value;
     document.getElementById("staticValue").value = value;
