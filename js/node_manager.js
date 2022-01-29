@@ -12,10 +12,37 @@ export function NodeManager(canvasID) {
     window.addEventListener("resize", this.draw.bind(this));
     canvas.addEventListener("mousedown", this.onMouseClick.bind(this));
     
+    document.getElementById("run").addEventListener("click", this.run.bind(this));
+    document.getElementById("reset").addEventListener("click", this.reset.bind(this));
+
     document.getElementById("addChild").addEventListener("click", this.addChild.bind(this));
     document.getElementById("deleteNode").addEventListener("click", this.deleteNode.bind(this));
     document.getElementById("setValue").addEventListener("click", this.setValue.bind(this));
 }
+
+NodeManager.prototype.reset = function() {
+    if (this.selected != -1) {
+        return;
+    };
+    this.selected = null;
+    for (const nodeLayer of this.nodes) {
+        for (const node of nodeLayer) {
+            node.pruned = false;
+            if (node.children.length != 0) {
+                node.value = null;
+            };
+        };
+    };
+    setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
+    this.draw();
+};
+
+NodeManager.prototype.run = function() {
+    this.selected = -1;
+    setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
+    this.nodes[0][0].minimax(Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+    this.draw();
+};
 
 NodeManager.prototype.setValue = function() {
     var value = document.getElementById("staticValue").value;
@@ -92,6 +119,9 @@ NodeManager.prototype.deleteNode = function() {
 };
 
 NodeManager.prototype.onMouseClick = function(event) {
+    if (this.selected == -1) {
+        return;
+    };
     this.selected = null;
     for (const nodeLayer of this.nodes) {
         for (const node of nodeLayer) {

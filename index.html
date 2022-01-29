@@ -17,8 +17,12 @@
 
         <div id="controls" class="form-group controls-container m-3 p-4">
             <span id = "main">
+                <h2 class = "title mb-3">Visualization</h2>
+                <button id = "run" class="btn btn-primary mb-1" style="width: 100%">Run</button>
+                <button id = "reset" class="btn btn-danger mb-4" style="width: 100%">Reset</button>
                 <h2 class = "title mb-3">Node Options</h2>
                 <p id = "unselectedText" class = "text">No node selected.</p>
+                <p id = "runningText" class = "text" style = "display: none">Reset visualization before changing nodes.</p>
                 <span id = "nodeOptions" style = "display: none">
                     <span id = "static">
                         <input id="staticValue" class="form-control mb-1" type="number" placeholder="Static Evaluation" autocomplete="off">
