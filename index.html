@@ -10,7 +10,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand ms-2 nav-title" href="#">Alpha-Beta Visualizer</a>
                 <div class="navbar-nav">
-                    <a class="nav-link me-2" href="https://github.com/BSmith156" target="_blank"><img class="nav-img" src="images/github.svg" alt="GitHub logo"></a>
+                    <a class="nav-link me-2" href="https://github.com/BSmith156/Alpha-Beta-Visualizer" target="_blank"><img class="nav-img" src="images/github.svg" alt="GitHub logo"></a>
                 </div>
             </div>
         </nav>
@@ -20,8 +20,12 @@
                 <h2 class = "title mb-3">Node Options</h2>
                 <p id = "unselectedText" class = "text">No node selected.</p>
                 <span id = "nodeOptions" style = "display: none">
+                    <span id = "static">
+                        <input id="staticValue" class="form-control mb-1" type="number" placeholder="Static Evaluation" autocomplete="off">
+                        <button id="setValue" class="btn btn-primary mb-3" style="width: 100%">Set Static Evaluation</button>
+                    </span>
                     <button id = "addChild" class="btn btn-primary mb-1" style="width: 100%">Add Child</button>
-                    <button id = "deleteNode" class="btn btn-danger mb-1" style="width: 100%">Delete Node</button>
+                    <button id = "deleteNode" class="btn btn-danger" style="width: 100%">Delete Node</button>
                 </span>
             </span>
         </div>

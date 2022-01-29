@@ -14,12 +14,26 @@ export function NodeManager(canvasID) {
     
     document.getElementById("addChild").addEventListener("click", this.addChild.bind(this));
     document.getElementById("deleteNode").addEventListener("click", this.deleteNode.bind(this));
+    document.getElementById("setValue").addEventListener("click", this.setValue.bind(this));
+}
+
+NodeManager.prototype.setValue = function() {
+    var value = document.getElementById("staticValue").value;
+    if(isNaN(value) || value == "") {
+        value = 0;
+    } else {
+        value = Number.parseInt(value);
+    }
+    this.selected.value = value;
+    document.getElementById("staticValue").value = value;
+    this.draw();
 }
 
 NodeManager.prototype.addChild = function() {
     if (this.selected == null) {
         return;
     };
+    this.selected.value = null;
     var newNode = new Node();
     newNode.layer = this.selected.layer + 1;
     newNode.max = !this.selected.max;
@@ -29,6 +43,7 @@ NodeManager.prototype.addChild = function() {
     };
     this.nodes[newNode.layer].push(newNode);
     this.bottomLayerCount = null;
+    setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
     this.draw();
 };
 
@@ -59,6 +74,9 @@ NodeManager.prototype.deleteNode = function() {
         for (var i = 0; i < node.children.length; i++) {
             if (node.children[i] == this.selected) {
                 node.children.splice(i, 1);
+                if (node.children.length == 0) {
+                    node.value = 0;
+                };
                 done = true;
                 break;
             };
@@ -68,6 +86,7 @@ NodeManager.prototype.deleteNode = function() {
         };
     };
     this.selected = null;
+    setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
     this.bottomLayerCount = null;
     this.draw();
 };
@@ -144,7 +163,7 @@ NodeManager.prototype.draw = function() {
     this.nodes[0][0].draw(this.ctx);
 
     if (this.selected != null) {
-        this.ctx.lineWidth = Math.max(1, parseInt(Node.radius / 10));;
+        this.ctx.lineWidth = Math.max(1, parseInt(Node.radius / 10));
         this.ctx.strokeStyle = "#ff0000";
         this.ctx.beginPath();
         this.ctx.arc(this.selected.pos[0], this.selected.pos[1], Node.radius, 0, 2 * Math.PI);

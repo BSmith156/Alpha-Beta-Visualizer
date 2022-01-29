@@ -1,6 +1,7 @@
 export function Node() {
     this.pos = [0, 0];
     this.children = [];
+    this.value = 0;
 };
 
 Node.prototype.draw = function(ctx) {
@@ -13,6 +14,9 @@ Node.prototype.draw = function(ctx) {
         ctx.stroke();
         node.draw(ctx);
     };
+    ctx.font = Node.radius + "px Helvetica";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
     ctx.beginPath();
     ctx.arc(this.pos[0], this.pos[1], Node.radius, 0, 2 * Math.PI);
     if (this.max) {
@@ -21,10 +25,15 @@ Node.prototype.draw = function(ctx) {
         ctx.lineWidth = Math.max(1, parseInt(Node.radius / 10));
         ctx.strokeStyle = "#000000";
         ctx.stroke();
+        ctx.fillStyle = "#000000";
     } else {
         ctx.fillStyle = "#000000";
         ctx.fill();
+        ctx.fillStyle = "#ffffff";
     };
-}
+    if (this.value != null) {
+        ctx.fillText(this.value, this.pos[0], this.pos[1]);
+    };
+};
 
 Node.radius = 0
