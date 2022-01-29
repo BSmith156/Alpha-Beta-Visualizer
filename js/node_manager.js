@@ -193,7 +193,7 @@ NodeManager.prototype.draw = function() {
     this.setNodePositions();
     this.nodes[0][0].draw(this.ctx);
 
-    if (this.selected != null) {
+    if (this.selected != null && this.selected != -1) {
         this.ctx.lineWidth = Math.max(1, parseInt(Node.radius / 10));
         this.ctx.strokeStyle = "#ff0000";
         this.ctx.beginPath();
