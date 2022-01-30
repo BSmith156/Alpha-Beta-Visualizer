@@ -1,3 +1,4 @@
+import { helpNext } from "./help.js";
 import { NodeManager } from "./node_manager.js";
 import { Node } from "./node.js";
 
@@ -26,3 +27,5 @@ node_manager.selected = -1;
 node_manager.reset();
 
 node_manager.draw();
+
+helpNext();
