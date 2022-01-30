@@ -180,7 +180,7 @@ NodeManager.prototype.setNodePositions = function() {
     for (const nodeLayer of this.nodes.slice(0, -1).reverse()) {
         for (const node of nodeLayer) {
             if (node.children.length != 0) {
-                node.pos[0] = (node.children[0].pos[0] + node.children.at(-1).pos[0]) / 2;
+                node.pos[0] = (node.children[0].pos[0] + node.children[node.children.length - 1].pos[0]) / 2;
                 node.pos[1] = yOffset + (2 + 3 * node.layer) * Node.radius;
             };
         };
@@ -192,7 +192,7 @@ NodeManager.prototype.draw = function() {
     this.setNodeRadius();
     this.setNodePositions();
     this.nodes[0][0].draw(this.ctx);
-
+    
     if (this.selected != null && this.selected != -1) {
         this.ctx.lineWidth = Math.max(1, parseInt(Node.radius / 10));
         this.ctx.strokeStyle = "#ff0000";
