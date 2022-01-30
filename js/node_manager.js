@@ -57,7 +57,7 @@ NodeManager.prototype.step = function() {
 }
 
 NodeManager.prototype.run = function() {
-    if (this.currentNode == null) {
+    if (this.selected != -1) {
         this.selected = -1;
         setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
         this.nodes[0][0].alpha = Number.NEGATIVE_INFINITY;
