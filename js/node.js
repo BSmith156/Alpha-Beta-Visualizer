@@ -110,8 +110,39 @@ Node.prototype.draw = function(ctx) {
         ctx.fillStyle = "#ffffff";
     };
     if (this.value != null && this.value != Number.POSITIVE_INFINITY && this.value != Number.NEGATIVE_INFINITY) {
-        ctx.fillText(this.value, this.pos[0], this.pos[1]);
+        ctx.fillText(this.value, this.pos[0], this.pos[1] + Node.radius / 15);
     };
+
+    if (this.children.length == 0) {
+        return;
+    };
+
+    ctx.font = "bold " + Node.radius / 2.5 + "px Helvetica";
+    ctx.fillStyle = "#0000ff";
+
+    var alphaText = "α: ";
+    if (this.alpha == Number.POSITIVE_INFINITY) {
+        alphaText += "Inf";
+    } else if (this.alpha == Number.NEGATIVE_INFINITY) {
+        alphaText += "-Inf";
+    } else if (this.alpha == null){
+        alphaText = "";
+    } else {
+        alphaText += this.alpha;
+    }
+    ctx.fillText(alphaText, this.pos[0], this.pos[1] - Node.radius * 1.75);
+    
+    var betaText = "β: ";
+    if (this.beta == Number.POSITIVE_INFINITY) {
+        betaText += "Inf";
+    } else if (this.beta == Number.NEGATIVE_INFINITY) {
+        betaText += "-Inf";
+    } else if (this.beta == null){
+        betaText = "";
+    } else {
+        betaText += this.beta;
+    }
+    ctx.fillText(betaText, this.pos[0], this.pos[1] - Node.radius * 1.25);
 };
 
 Node.radius = 0

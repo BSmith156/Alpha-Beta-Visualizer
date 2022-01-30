@@ -32,6 +32,8 @@ NodeManager.prototype.reset = function() {
         for (const node of nodeLayer) {
             node.pruned = false;
             node.step = 0;
+            node.alpha = null;
+            node.beta = null;
             if (node.children.length != 0) {
                 node.value = null;
             };
@@ -181,20 +183,20 @@ NodeManager.prototype.setNodeRadius = function() {
         };
     };
     var xDiam = this.canvas.width / (0.5 + 1.5 * this.bottomLayerCount);
-    var yDiam = this.canvas.height / (0.5 + 1.5 * this.nodes.length);
+    var yDiam = this.canvas.height / (1 + 2 * this.nodes.length);
     Node.radius = Math.min(xDiam, yDiam) / 2;
 };
 
 NodeManager.prototype.setNodePositions = function() {
     var xOffset = (this.canvas.width - Node.radius * (1 + 3 * this.bottomLayerCount)) / 2;
-    var yOffset = (this.canvas.height - Node.radius * (1 + 3 * this.nodes.length)) / 2;
+    var yOffset = (this.canvas.height - Node.radius * (1 + 4 * this.nodes.length)) / 2;
     var count = 2;
     var nodeStack = [this.nodes[0][0]];
     while (nodeStack.length != 0) {
         var node = nodeStack.pop();
         if (node.children.length == 0) {
             node.pos[0] = xOffset + count * Node.radius;
-            node.pos[1] = yOffset + (2 + 3 * node.layer) * Node.radius;
+            node.pos[1] = yOffset + (2 + 4 * node.layer) * Node.radius;
             count += 3;
         } else {
             for (const child of node.children.slice().reverse()) {
@@ -206,7 +208,7 @@ NodeManager.prototype.setNodePositions = function() {
         for (const node of nodeLayer) {
             if (node.children.length != 0) {
                 node.pos[0] = (node.children[0].pos[0] + node.children[node.children.length - 1].pos[0]) / 2;
-                node.pos[1] = yOffset + (2 + 3 * node.layer) * Node.radius;
+                node.pos[1] = yOffset + (2 + 4 * node.layer) * Node.radius;
             };
         };
     };
