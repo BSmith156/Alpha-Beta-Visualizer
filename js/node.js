@@ -3,6 +3,7 @@ export function Node() {
     this.children = [];
     this.value = 0;
     this.pruned = false;
+    this.step = 0;
 };
 
 Node.prototype.setPruned = function() {
@@ -12,43 +13,64 @@ Node.prototype.setPruned = function() {
     };
 };
 
-Node.prototype.minimax = function(alpha, beta) {
-    if (this.value != null) {
-        return this.value;
+// Modified so algorithm can be stepped through
+Node.prototype.minimax = function() {
+    if (this.step == 0) {
+        this.childSearchDone = false
+        this.currentChildSearch = 0;
+        if (this.children.length == 0) {
+            if (this.parent != null) {
+                this.parent.return = this.value;
+            };
+            if (this.parent == null) {
+                return this.parent;
+            };
+            return this.parent.minimax();
+        };
+        if (this.max) {
+            this.value = Number.NEGATIVE_INFINITY;
+        } else {
+            this.value = Number.POSITIVE_INFINITY;
+        };
+        this.step += 1;
     };
-
-    if (this.max) {
-        this.value = Number.NEGATIVE_INFINITY;
-        var done = false;
-        for (const child of this.children) {
-            if (done) {
-                child.setPruned();
-                continue;
+    if (this.step == 1) {
+        if (this.currentChildSearch == this.children.length) {
+            if (this.parent != null) {
+                this.parent.return = this.value;
             };
-            var childValue = child.minimax(alpha, beta);
+            if (this.parent == null) {
+                return this.parent;
+            };
+            return this.parent.minimax();;
+        };
+        if (this.childSearchDone) {
+            for (var i = this.currentChildSearch; i < this.children.length; i++) {
+                this.children[i].setPruned();
+            };
+            this.currentChildSearch = this.children.length;
+            return this;
+        };
+        var child = this.children[this.currentChildSearch];
+        child.alpha = this.alpha;
+        child.beta = this.beta;
+        this.step += 1;
+        return child;
+    } else if (this.step == 2) {
+        var childValue = this.return
+        if (this.max) {
             this.value = Math.max(this.value, childValue);
-            alpha = Math.max(alpha, childValue);
-            if (beta <= alpha) {
-                done = true;
-            };
-        };
-        return this.value;
-    } else {
-        this.value = Number.POSITIVE_INFINITY;
-        var done = false;
-        for (const child of this.children) {
-            if (done) {
-                child.setPruned();
-                continue;
-            };
-            var childValue = child.minimax(alpha, beta);
+            this.alpha = Math.max(this.alpha, childValue);
+        } else {
             this.value = Math.min(this.value, childValue);
-            beta = Math.min(beta, childValue);
-            if (beta <= alpha) {
-                done = true;
-            };
+            this.beta = Math.min(this.beta, childValue);
         };
-        return this.value;
+        if (this.beta <= this.alpha) {
+            this.childSearchDone = true;
+        };
+        this.currentChildSearch += 1;
+        this.step -= 1;
+        return this;
     };
 };
 
@@ -87,7 +109,7 @@ Node.prototype.draw = function(ctx) {
         ctx.fill();
         ctx.fillStyle = "#ffffff";
     };
-    if (this.value != null) {
+    if (this.value != null && this.value != Number.POSITIVE_INFINITY && this.value != Number.NEGATIVE_INFINITY) {
         ctx.fillText(this.value, this.pos[0], this.pos[1]);
     };
 };

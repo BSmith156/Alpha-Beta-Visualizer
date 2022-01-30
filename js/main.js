@@ -6,6 +6,7 @@ var node_manager = new NodeManager("canvas");
 var startNode = new Node();
 startNode.layer = 0;
 startNode.max = true;
+startNode.parent = null;
 node_manager.nodes.push([startNode]);
 
 node_manager.selected = startNode;

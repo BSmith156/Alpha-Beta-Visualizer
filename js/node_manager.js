@@ -8,11 +8,13 @@ export function NodeManager(canvasID) {
     this.nodes = [];
     this.selected = null;
     this.bottomLayerCount = null;
+    this.currentNode = null
 
     window.addEventListener("resize", this.draw.bind(this));
     canvas.addEventListener("mousedown", this.onMouseClick.bind(this));
     
     document.getElementById("run").addEventListener("click", this.run.bind(this));
+    document.getElementById("step").addEventListener("click", this.step.bind(this));
     document.getElementById("reset").addEventListener("click", this.reset.bind(this));
 
     document.getElementById("addChild").addEventListener("click", this.addChild.bind(this));
@@ -25,9 +27,11 @@ NodeManager.prototype.reset = function() {
         return;
     };
     this.selected = null;
+    this.currentNode = null;
     for (const nodeLayer of this.nodes) {
         for (const node of nodeLayer) {
             node.pruned = false;
+            node.step = 0;
             if (node.children.length != 0) {
                 node.value = null;
             };
@@ -37,10 +41,30 @@ NodeManager.prototype.reset = function() {
     this.draw();
 };
 
+NodeManager.prototype.step = function() {
+    if (this.currentNode != null) {
+        this.currentNode = this.currentNode.minimax();
+    } else if (this.selected != -1) {
+        this.selected = -1;
+        setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
+        this.nodes[0][0].alpha = Number.NEGATIVE_INFINITY;
+        this.nodes[0][0].beta = Number.POSITIVE_INFINITY;
+        this.currentNode = this.nodes[0][0]
+    }
+    this.draw();
+}
+
 NodeManager.prototype.run = function() {
-    this.selected = -1;
-    setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
-    this.nodes[0][0].minimax(Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+    if (this.currentNode == null) {
+        this.selected = -1;
+        setSelectedNode(this.selected, this.selected == this.nodes[0][0]);
+        this.nodes[0][0].alpha = Number.NEGATIVE_INFINITY;
+        this.nodes[0][0].beta = Number.POSITIVE_INFINITY;
+        this.currentNode = this.nodes[0][0]
+    };
+    while (this.currentNode != null) {
+        this.currentNode = this.currentNode.minimax();
+    };
     this.draw();
 };
 
@@ -65,6 +89,7 @@ NodeManager.prototype.addChild = function() {
     var newNode = new Node();
     newNode.layer = this.selected.layer + 1;
     newNode.max = !this.selected.max;
+    newNode.parent = this.selected;
     this.selected.children.push(newNode);
     if (newNode.layer == this.nodes.length) {
         this.nodes.push([]);
@@ -193,11 +218,15 @@ NodeManager.prototype.draw = function() {
     this.setNodePositions();
     this.nodes[0][0].draw(this.ctx);
     
-    if (this.selected != null && this.selected != -1) {
+    var highlight = this.selected;
+    if (this.currentNode != null) {
+        highlight = this.currentNode;
+    };
+    if (highlight != null && highlight != -1) {
         this.ctx.lineWidth = Math.max(1, parseInt(Node.radius / 10));
         this.ctx.strokeStyle = "#ff0000";
         this.ctx.beginPath();
-        this.ctx.arc(this.selected.pos[0], this.selected.pos[1], Node.radius, 0, 2 * Math.PI);
+        this.ctx.arc(highlight.pos[0], highlight.pos[1], Node.radius, 0, 2 * Math.PI);
         this.ctx.stroke();
     };
 };
